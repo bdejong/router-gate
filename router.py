@@ -32,7 +32,7 @@ class TelnetConnection(object):
 
 
 class Router(TelnetConnection):
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username="root", password="admin"):
         super(Router, self).__init__(ip, username, password)
 
     def get_switch_light_command(self, gpio_num, turn_on):
@@ -88,8 +88,6 @@ class Router(TelnetConnection):
 
 if __name__ == "__main__":
     ip = '192.168.1.107'
-    username = 'root'
-    password = 'admin'
 
-    with Router(ip, username, password) as router:
+    with Router(ip) as router:
         router.test_speed(["gpio disable 2", "gpio enable 2"])
