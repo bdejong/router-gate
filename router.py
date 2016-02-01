@@ -8,26 +8,52 @@ class TelnetConnection(object):
         self.ip = ip
         self.username = username
         self.password = password
-        self.tn = None
+        self._tn = None
 
-    def __enter__(self):
-        self.tn = telnetlib.Telnet(self.ip)
-        self.tn.read_until("login: ")
-        self.tn.write(self.username + "\n")
-        self.tn.read_until("Password: ")
-        self.tn.write(self.password + "\n")
-        self.tn.read_until("~# ")
+    def is_connected(self):
+        return self._tn is not None
+
+    def connect(self):
+        if self.is_connected():
+            self.disconnect()
+
+        self._tn = telnetlib.Telnet(self.ip)
+        self.read_until("login: ")
+        self.write(self.username + "\n")
+        self.read_until("Password: ")
+        self.write(self.password + "\n")
+        self.read_until("~# ")
+
         return self
 
+    def disconnect(self):
+        if self.is_connected():
+            self._tn.close()
+
+        return self
+
+    def read_until(self, string):
+        if not self.is_connected():
+            return ""
+        data = self._tn.read_until(string.encode("ascii"))
+        return data.decode("ascii")
+
+    def write(self, string):
+        if self.is_connected():
+            self._tn.write(string.encode("ascii"))
+
+    def __enter__(self):
+        return self.connect()
+
     def __exit__(self, exc_type, exc_value, traceback):
-        self.tn.close()
+        self.disconnect()
 
     def __call__(self, command):
-        if not self.tn:
+        if not self.is_connected():
             return None
 
-        self.tn.write(command + "\n")
-        data = self.tn.read_until("~# ").split("\n")[1:-1]
+        self.write(command + "\n")
+        data = self.read_until("~# ").split("\n")[1:-1]
         return "\n".join(data).strip()
 
 
@@ -83,7 +109,13 @@ class Router(TelnetConnection):
                 min_lat = min(lat_diff, min_lat)
                 max_lat = max(lat_diff, max_lat)
 
-            print (num_calls / latency), "\t", min_lat*1000, "\t", max_lat*1000
+            print(
+                "{}\t{}\t{}".format(
+                    num_calls / latency,
+                    min_lat*1000,
+                    max_lat*1000
+                )
+            )
 
 
 if __name__ == "__main__":
