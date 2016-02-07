@@ -1,40 +1,44 @@
 from pythonosc import dispatcher
 from pythonosc import osc_server
 from router import Router
+import logging
+from config import ROUTER_IPS, INCOMING_OSC, DEBUG_LEVEL
 
-IPS = ['192.168.1.108', '192.168.1.109']
-ROUTERS = [Router(ip).connect() for ip in IPS]
+ROUTERS = [Router(ip).connect() for ip in ROUTER_IPS]
+
+logging.basicConfig(level=DEBUG_LEVEL)
 
 
 def handle_light(unused_addr, value):
-    # print("handle_light", unused_addr, value)
+    logging.debug("{} {}".format(unused_addr, value))
 
     parts = unused_addr.strip("/").split("/")
+
     if len(parts) != 4:
-        print("failed split")
+        logging.debug("Cound't split message: {}".format(unused_addr))
         return
 
     router_num = int(parts[1])
     light_num = int(parts[3])
 
     if router_num >= len(ROUTERS):
-        print("router out of bounds")
+        logging.debug("OUT OF BOUNDS: index:{} num_routers:{}".format(
+                router_num, len(ROUTERS)
+            )
+        )
         return
 
-    ROUTERS[router_num].switch_light(light_num, value > 0.5)
+    ROUTERS[router_num].switch_light(light_num, float(value) > 0.5)
+
 
 if __name__ == "__main__":
     dispatcher = dispatcher.Dispatcher()
 
-    dispatcher.set_default_handler(print)
+    if DEBUG_LEVEL == logging.DEBUG:
+        dispatcher.set_default_handler(print)
 
-    for index, ip in enumerate(IPS):
-        address = "/router/*/light/*".format(index + 1)
-        dispatcher.map(address, handle_light)
+    dispatcher.map("/router/*/light/*", handle_light)
 
-    server = osc_server.ThreadingOSCUDPServer(
-        ("127.0.0.1", 8000),
-        dispatcher
-    )
+    server = osc_server.ThreadingOSCUDPServer(INCOMING_OSC, dispatcher)
 
     server.serve_forever()

@@ -1,0 +1,12 @@
+import logging
+
+ROUTER_IPS = ['192.168.1.106']
+
+INCOMING_OSC = ("127.0.0.1", 8000)
+OUTGOING_OSC = ("127.0.0.1", 8001)
+
+# For getting TX/RX
+ROUTER_DELAY = 1
+ROUTER_INTERFACE = "vlan1"
+
+DEBUG_LEVEL = logging.INFO
