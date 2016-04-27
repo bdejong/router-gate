@@ -31,14 +31,18 @@ def handle_light(unused_addr, value):
     ROUTERS[router_num].switch_light(light_num, float(value) > 0.5)
 
 
-if __name__ == "__main__":
-    dispatcher = dispatcher.Dispatcher()
+def start_server():
+    mapping = dispatcher.Dispatcher()
 
     if DEBUG_LEVEL == logging.DEBUG:
-        dispatcher.set_default_handler(print)
+        mapping.set_default_handler(print)
 
-    dispatcher.map("/router/*/light/*", handle_light)
+    mapping.map("/router/*/light/*", handle_light)
 
-    server = osc_server.ThreadingOSCUDPServer(INCOMING_OSC, dispatcher)
+    server = osc_server.ThreadingOSCUDPServer(INCOMING_OSC, mapping)
 
     server.serve_forever()
+
+
+if __name__ == "__main__":
+    start_server()

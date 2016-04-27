@@ -42,7 +42,7 @@ class StopableDeamon():
         self.thread.join()
 
     def deal_with_packets(self, ip, RX, TX):
-        if self.RX:
+        if self.RX is not None:
             d_TX = TX - self.TX
             d_RX = RX - self.RX
 
@@ -66,7 +66,7 @@ class StopableDeamon():
         self.TX = TX
 
 
-def main():
+def start_capturing_packets():
     deamons = []
     for index, ip in enumerate(ROUTER_IPS):
         osc_adress = "/router/{}".format(index)
@@ -96,4 +96,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    start_capturing_packets()
