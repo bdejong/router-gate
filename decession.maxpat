@@ -38,6 +38,42 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-9",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 79.091003, 256.0, 51.0, 20.0 ],
+					"style" : "",
+					"text" : "Speed"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-8",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 101.0, 491.0, 62.0, 20.0 ],
+					"style" : "",
+					"text" : "On/Off"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-6",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 1300.90918, 297.0, 40.0, 20.0 ],
+					"style" : "",
+					"text" : "PWM"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"fontname" : "Arial",
 					"fontsize" : 13.0,
 					"id" : "obj-101",
@@ -468,19 +504,6 @@
 					"patching_rect" : [ 852.318176, 65.0, 60.0, 22.0 ],
 					"style" : "",
 					"text" : "loadbang"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-107",
-					"maxclass" : "newobj",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 1175.0, 132.0, 34.0, 22.0 ],
-					"style" : "",
-					"text" : "gate"
 				}
 
 			}
