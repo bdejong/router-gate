@@ -58,7 +58,7 @@ class TelnetConnection(object):
 
 
 class Router(TelnetConnection):
-    def __init__(self, ip, username="root", password="admin"):
+    def __init__(self, ip, username="root", password="d3c3ss10n"):
         super(Router, self).__init__(ip, username, password)
 
     def get_switch_light_command(self, gpio_num, turn_on):
